@@ -1,0 +1,395 @@
+
+local whitelistecheck = loadstring(game:HttpGet("https://pastebin.com/raw/yrZjTYjp", true))()
+if whitelistecheck[game:service('Players').LocalPlayer.UserId] then
+    
+    pcall(function()
+	for i,v in pairs(game.CoreGui:GetChildren()) do
+	   if v:FindFirstChild("ToolTip") then
+		  v:Destroy()
+	   end
+	end
+	end)
+	
+	local Config = {
+	   WindowName = "NoAntiCheat2 Reborn",
+	   Color = Color3.fromRGB(255,128,64),
+	   Keybind = Enum.KeyCode.RightBracket
+	}
+	_G.Starter = true
+	
+	local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/AlexR32/Roblox/main/BracketV3.lua"))()
+	local Window = Library:CreateWindow(Config, game:GetService("CoreGui"))
+	
+	local Tab1 = Window:CreateTab("Main Tab")
+	local INChecker = Window:CreateTab("InGame Checker")
+	local Teleports = Window:CreateTab("Teleporter")
+	local Tab2 = Window:CreateTab("UI Settings")
+	local Notes = Window:CreateTab("Note")
+	
+	local Section1 = Tab1:CreateSection("Automatic")
+	local Misc = Tab1:CreateSection("Misc")
+	local Farms = Tab1:CreateSection("Farms")
+
+	local Checker = INChecker:CreateSection("Checks")
+	
+	local Teleporter = Teleports:CreateSection("Teleports")
+
+	local Section3 = Tab2:CreateSection("Menu")
+	local Section4 = Tab2:CreateSection("Background")
+	
+	local Note = Notes:CreateSection("Note")
+	
+	local Toggle1 = Section1:CreateToggle("Auto Kunai", nil, function(x)
+	Kunai = x
+	while wait() and Kunai do
+	   for i,v in pairs(game.Workspace:GetChildren()) do
+		  if v.Name == "Target" and v:FindFirstChild("owner") and v.owner.Value == game.Players.LocalPlayer.Character then
+			 local args = {
+				[1] = v.Part.CFrame,
+				[2] = 1,
+				[4] = false
+			 }
+	
+			 game:GetService("Players").LocalPlayer.Character.Throw.Kunai:FireServer(unpack(args))
+			 wait(1)
+		  end
+	   end
+	end
+	end)
+	Toggle1:AddToolTip("Start a Kunai Training and Toggle")
+	
+	local Toggle2 = Section1:CreateToggle("Auto Pushup", nil, function(x)
+	Push = x
+	while wait(1) and Push do
+	   game:GetService("Players").LocalPlayer.Character:FindFirstChild("Pushup Training").RemoteEvent:FireServer()
+	end
+	end)
+	Toggle2:AddToolTip("Start a Kunai Training and Toggle")
+
+
+	Misc:CreateToggle("Anti Chest Ban USE FOR CHEST FARM PLEASE",nil,function(x)
+		CF = x
+		while wait() and CF do
+				for i,v in pairs(game.Workspace:GetChildren()) do
+					if v:FindFirstChild("Script") and v:FindFirstChild("ClickDetector") and not v:FindFirstChild("Rank") and math.floor(v.Position.y) == 523 then
+						v:Destroy()
+					end
+				end
+		end
+	end)
+	
+	Misc:CreateSlider("Attack Speed",0,1,nil,false, function(Value)
+	_G.GlobalATTACK = Value
+	end)
+	
+	Misc:CreateToggle("Change Attack Speed",nil,function(x)
+	ATSP = x
+	game.Players.LocalPlayer.Character.ChildAdded:Connect(function(int)
+	if int.Name == "NoAttack" and ATSP then
+	   game.Debris:AddItem(100,_G.GlobalATTACK ) --- Change this number for fast combat speed
+	end
+	end)
+	end)
+	
+	_G.Walker = 16
+	Misc:CreateSlider("Walk Speed",0,200,nil,false, function(Value)
+	_G.Walker = Value
+	end)
+	
+	Misc:CreateToggle("Change Walk Speed",nil,function(x)
+	Walks = x
+	local mt = getrawmetatable(game)
+	local newindex = mt.__newindex -- Save the original function, since we're going to hijack it.
+	
+	setreadonly(mt, false)
+	mt.__newindex = newcclosure(function(self, property, new_value)
+	if rawequal(self, game.Players.LocalPlayer.Character:WaitForChild("Humanoid")) and property == "WalkSpeed" and Walks then
+	   return newindex(self, property, _G.Walker) -- Cancel the operation
+	end
+	
+	return newindex(self, property, new_value) -- Otherwise, it's valid, and ok to change
+	end)
+	setreadonly(mt, true)
+	end)
+
+	Misc:CreateToggle("Hide Name",nil,function(x)
+		HN =x 
+		while wait() and HN do
+			for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+				if v.Name == "FakeHead" then
+					v:Destroy()
+				end
+			end
+		end
+		end)
+
+	Misc:CreateToggle("Remove Combat Pause",nil,function(x)
+		RCP = x
+		game.Players.LocalPlayer.Character.ChildAdded:Connect(function(int)
+		if int.Name == "CombatPause" and RCP then
+		   game.Debris:AddItem(int,0) --- Change this number for fast combat speed
+		end
+		end)
+		end)
+	
+	Misc:CreateToggle("No Death",nil,function(x)
+	ND = x
+	game.Players.LocalPlayer.Character.ChildAdded:Connect(function(int)
+	if int.Name == "Dead" or int.Name == "KO" and ND then
+		game.Debris:AddItem(int,0)
+	end
+	end)
+	game.Players.LocalPlayer.Character.Effects.ChildAdded:Connect(function(int)
+		if int.Name == "Dead" or int.Name == "KO" and ND then
+			game.Debris:AddItem(int,0)
+		end
+		end)
+	end)
+	
+	Misc:CreateToggle("No Ragdoll",nil,function(x)
+	NR = x
+	game.Players.LocalPlayer.Character.Effects.ChildAdded:Connect(function(int)
+	if int.Name == "Ragdoll" and NR then
+	   game.Debris:AddItem(int,0)
+	end
+	end)
+	end)
+	
+	Misc:CreateToggle("Anti Heavy Slow",nil,function(x)
+	HS = x
+	game.Players.LocalPlayer.Character.Effects.ChildAdded:Connect(function(int)
+	if int.Name == "AntiHeavy" and HS then
+	   game.Debris:AddItem(int,0)
+	end
+	end)
+	end)
+	
+	Misc:CreateToggle("Anti Stun",nil,function(x)
+	HS = x
+	game.Players.LocalPlayer.Character.Effects.ChildAdded:Connect(function(int)
+	if string.find(int.Name, "Stun") or int.Name == "NoSprint" or int.Name == "SpeedBoost" and HS then
+	   game.Debris:AddItem(int,0)
+	end
+	end)
+	end)
+	
+	Misc:CreateToggle("Anti No Jump",nil,function(x)
+	NR = x
+	game.Players.LocalPlayer.Character.ChildAdded:Connect(function(int)
+	if int.Name == "NoJump" and NR then
+	   game.Debris:AddItem(int,0)
+	end
+	end)
+	end)
+	
+	Misc:CreateToggle("Anti No Tree Jump",nil,function(x)
+	NR = x
+	game.Players.LocalPlayer.Character.ChildAdded:Connect(function(int)
+	if int.Name == "NoTree" and NR then
+	   game.Debris:AddItem(int,0)
+	end
+	end)
+	end)
+	Misc:CreateToggle("Anti No Regen",nil,function(x)
+	NR = x
+	game.Players.LocalPlayer.Character.ChildAdded:Connect(function(int)
+	if int.Name == "NoRegen" and NR then
+	   game.Debris:AddItem(int,0)
+	end
+	end)
+	end)
+	
+	Misc:CreateButton("Knock Yourself",function()
+	game:GetService("ReplicatedStorage").SelfHarm:FireServer(10000)
+	end)
+	_G.CallBack = false
+	Farms:CreateToggle("(All) Scroll Farm",nil,function(x)
+	Scrolls = x
+	_G.Anchoredthatbi = x
+	while Scrolls and task.wait() do
+	   for i,v in pairs(game.Workspace:GetChildren()) do
+		  if v:FindFirstChild("Jutsu") and v:FindFirstChild("Rank") then
+			_G.CallBack = false
+			 pcall(function()
+			 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position + Vector3.new(0,-5,0),v.Position)
+			 end)
+			 pcall(function()
+				if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude < 10 then
+			 fireclickdetector(v.ClickDetector)
+			end
+			 end)
+			 _G.CallBack = true
+		  end
+	   end
+	end
+	end)
+
+	Misc:CreateButton("Noclip through Chest Barrier / Water",function(x)
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v.Name == "Water" then
+				v.CanCollide = false
+			end
+		end
+	end)
+
+	Misc:CreateButton("Revert Chest Barrier / Water",function(x)
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v.Name == "Water" then
+				v.CanCollide = true
+			end
+		end
+	end)
+	
+	Farms:CreateDropdown("Scroll List",{"Rasengan"},function(x)
+	Scroller = x
+	end)
+	
+	Farms:CreateToggle("(Specific) Scroll Farm",nil,function(x)
+	Scroll = x
+	_G.Anchoredthatbi = x
+	while Scroll and task.wait() do
+	   for i,v in pairs(game.Workspace:GetChildren()) do
+		  if v:FindFirstChild("Jutsu") and v:FindFirstChild("Rank") and v.Jutsu.Value == Scroller then
+			_G.CallBack = false
+			 pcall(function()
+			 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position + Vector3.new(0,-5,0),v.Position)
+			 end)
+			 pcall(function()
+				if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude < 10 then
+			 fireclickdetector(v.ClickDetector)
+			end
+			end)
+			_G.CallBack = true
+		  end
+	   end
+	end
+	end)
+	
+	Farms:CreateToggle("Chest Farm",nil,function(x)
+	Chest = x
+	_G.Anchoredthatbi = x
+	while Chest and wait() do
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if not v:FindFirstChild("Jutsu") and not v:FindFirstChild("Rank") and v:FindFirstChild("Script") and v:FindFirstChild("ClickDetector") and v.Name == "Lavr" then
+				_G.CallBack = false
+				pcall(function()
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(v.Position + Vector3.new(0,-5,0),v.Position)
+					end)
+					pcall(function()
+						if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude < 10 then
+					 fireclickdetector(v.ClickDetector)
+					end
+				end)
+				_G.CallBack = true
+			end
+		end
+	end
+	end)
+	
+	Farms:CreateToggle("Artifact Farm (WIP)",nil,function(x)
+
+	
+	_G.toggle = true
+local path = game:GetService("Workspace").Spawners.Spawner1
+while _G.toggle do task.wait()
+for i,v in pairs(path:GetChildren()) do
+if v.SpawnersChild then
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Spawner1.CFrame(v.Position + Vector3.new(0,-5,0),v.Position)
+						if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude < 10 then
+					 fireclickdetector(v.ClickDetector)
+else
+return
+end
+end
+end
+end
+
+
+	Checker:CreateButton("Check Scrolls",function()
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if v:FindFirstChild("Jutsu") and v:FindFirstChild("Rank") then
+				game.StarterGui:SetCore("SendNotification",{Title="Player1 wins",Text="There is a scroll, The Item:".." "..v.Jutsu.Value,Icon="",Duration=5})
+			end
+		end
+	end)
+
+	Checker:CreateButton("Check Chests",function()
+		for i,v in pairs(game.Workspace:GetChildren()) do
+			if not v:FindFirstChild("Jutsu") and not v:FindFirstChild("Rank") and v:FindFirstChild("Script") and v:FindFirstChild("ClickDetector") then
+				game.StarterGui:SetCore("SendNotification",{Title="Player1 wins",Text="There is a scroll, The Item:".." "..v.Jutsu.Value,Icon="",Duration=5})
+			end
+		end
+	end)
+
+	Teleporter:CreateDropdown("Teleport to Player",Table_Players,function(x)
+		Player = x 
+	end)
+
+
+	
+	-------------
+	local Toggle3 = Section3:CreateToggle("UI Toggle", nil, function(State)
+	Window:Toggle(State)
+	end)
+	Toggle3:CreateKeybind(tostring(Config.Keybind):gsub("Enum.KeyCode.", ""), function(Key)
+	Config.Keybind = Enum.KeyCode[Key]
+	end)
+	Toggle3:SetState(true)
+	
+	local Colorpicker3 = Section3:CreateColorpicker("UI Color", function(Color)
+	Window:ChangeColor(Color)
+	end)
+	Colorpicker3:UpdateColor(Config.Color)
+	
+	-- credits to jan for patterns
+	local Dropdown3 = Section4:CreateDropdown("Image", {"Default","Hearts","Abstract","Hexagon","Circles","Lace With Flowers","Floral"}, function(Name)
+	if Name == "Default" then
+	   Window:SetBackground("2151741365")
+	elseif Name == "Hearts" then
+	   Window:SetBackground("6073763717")
+	elseif Name == "Abstract" then
+	   Window:SetBackground("6073743871")
+	elseif Name == "Hexagon" then
+	   Window:SetBackground("6073628839")
+	elseif Name == "Circles" then
+	   Window:SetBackground("6071579801")
+	elseif Name == "Lace With Flowers" then
+	   Window:SetBackground("6071575925")
+	elseif Name == "Floral" then
+	   Window:SetBackground("5553946656")
+	end
+	end)
+	Dropdown3:SetOption("Default")
+	
+	local Colorpicker4 = Section4:CreateColorpicker("Color", function(Color)
+	Window:SetBackgroundColor(Color)
+	end)
+	Colorpicker4:UpdateColor(Color3.new(1,1,1))
+	
+	local Slider3 = Section4:CreateSlider("Transparency",0,1,nil,false, function(Value)
+	Window:SetBackgroundTransparency(Value)
+	end)
+	Slider3:SetValue(0)
+	
+	local Slider4 = Section4:CreateSlider("Tile Scale",0,1,nil,false, function(Value)
+	Window:SetTileScale(Value)
+	end)
+	Slider4:SetValue(0.5)
+	
+	Note:CreateLabel("Dear torio")
+	
+	Note:CreateLabel("Should have added anti cheat by now hehe.")
+
+	spawn(function()
+		while wait() do
+			if _G.Anchoredthatbi then
+				game.Players.LocalPlayer.Character.Torso.Anchored = true
+			else
+				game.Players.LocalPlayer.Character.Torso.Anchored = false
+			end
+	end
+		end)
+	end)
+	else
+	    print("Not Whitelisted")
+end
